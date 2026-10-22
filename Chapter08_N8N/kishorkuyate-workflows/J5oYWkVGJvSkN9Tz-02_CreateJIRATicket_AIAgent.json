@@ -1,0 +1,203 @@
+{
+  "name": "02_CreateJIRATicket_AIAgent",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Trigger",
+        "height": 416,
+        "width": 304
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "536ca391-003b-44f2-910b-8293fb73fa0c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        432,
+        64
+      ],
+      "id": "378a40b4-3cd0-4471-bb7c-8b0a2280a51e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "content": "# Action",
+        "height": 416,
+        "width": 432,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        352,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "f3df836d-efd6-43db-a174-6c330c5c6950",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Result",
+        "height": 416,
+        "width": 304,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        816,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "6ec71808-90c9-47e4-9405-6ef15c66bf1c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        400,
+        304
+      ],
+      "id": "6fda4569-42b4-4a9e-b160-333388cf923b",
+      "name": "Brain",
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        528,
+        304
+      ],
+      "id": "04df645c-a30d-4690-ad01-6d6a9041a449",
+      "name": "Memory"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        112,
+        80
+      ],
+      "id": "a81ac3a9-b550-46a8-aea9-8fb13a7755ef",
+      "name": "When chat message received",
+      "webhookId": "b424ea6e-279d-46e9-ba98-9d346b06a938"
+    },
+    {
+      "parameters": {
+        "project": {
+          "__rl": true,
+          "value": "10000",
+          "mode": "list",
+          "cachedResultName": "Bankout"
+        },
+        "issueType": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Issue_Type', ``, 'string') }}",
+          "mode": "id"
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.jiraTool",
+      "typeVersion": 1,
+      "position": [
+        640,
+        304
+      ],
+      "id": "cd3dab3d-5f2b-4599-a27c-83d6d10ef74b",
+      "name": "Create an issue in Jira Software",
+      "credentials": {
+        "jiraSoftwareCloudApi": {
+          "id": "IgyrxRUczhp3ZjxA",
+          "name": "Jira SW Cloud account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Brain": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an issue in Jira Software": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

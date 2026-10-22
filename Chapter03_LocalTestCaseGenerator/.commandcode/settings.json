@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(python -c \" import docx doc = docx.Document(r'C:\\Users\\kisho\\PlayAI4xTester\\Chapter01_LLMBasics\\Product Requirements Document_ VWO Login Dashboard.docx') for para in doc.paragraphs: print(repr(para.text)) \")",
+      "Shell(mvn:*)",
+      "Shell(git:*)",
+      "Shell(Get-ChildItem:*)",
+      "Shell(Select-Object:*)",
+      "Shell(Format-Table:*)",
+      "Shell(dir:*)",
+      "Shell(robocopy:*)",
+      "Shell(exit:*)",
+      "Shell(rmdir:*)",
+      "Shell(Copy-Item:*)",
+      "Shell(Write-Output:*)",
+      "powershell"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}

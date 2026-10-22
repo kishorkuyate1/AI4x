@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "source_issue_key": "PROJ-1",
+  "generated_at": "2026-08-30T12:00:00Z",
+  "generator_version": "1.0.0",
+  "overview": "Export to PDF\n\nAllow export.",
+  "scope_in": [
+    "All acceptance criteria for PROJ-1",
+    "Labels: export",
+    "Components: Reports",
+    "Priority: Medium"
+  ],
+  "scope_out": [
+    "Issues outside the listed components",
+    "Performance / load unless explicitly in scope"
+  ],
+  "approach": [
+    "Derive at least one scenario per acceptance criterion (deterministic).",
+    "Optionally expand scenarios using GROQ (`openai/gpt-oss-120b`).",
+    "Validate the final plan schema before delivery."
+  ],
+  "entry_criteria": [
+    "Jira issue PROJ-1 is fetchable and not in 'Done' state",
+    "Acceptance criteria are populated"
+  ],
+  "exit_criteria": [
+    "All linked test scenarios executed",
+    "All P0/P1 defects resolved or explicitly waived",
+    "Test Plan reviewed and signed off for PROJ-1"
+  ],
+  "test_scenarios": [
+    {
+      "id": "TC-1",
+      "title": "Verify: PDF is downloadable",
+      "type": "functional",
+      "given": "the system is in a known good state",
+      "when": "the user exercises: PDF is downloadable",
+      "then": "the observed behavior matches the acceptance criterion",
+      "linked_ac": 1
+    },
+    {
+      "id": "TC-2",
+      "title": "Verify: PDF respects locale",
+      "type": "functional",
+      "given": "the system is in a known good state",
+      "when": "the user exercises: PDF respects locale",
+      "then": "the observed behavior matches the acceptance criterion",
+      "linked_ac": 2
+    }
+  ],
+  "risks": [
+    "Ambiguous acceptance criteria can produce shallow scenarios (mitigation: review with PM).",
+    "GROQ expansions may introduce duplicates; dedupe step in renderer."
+  ],
+  "references": {
+    "jira_url": "https://acme.atlassian.net/browse/PROJ-1",
+    "reporter": "Jane",
+    "assignee": "John",
+    "fetched_at": "2026-08-30T12:00:00Z"
+  }
+}

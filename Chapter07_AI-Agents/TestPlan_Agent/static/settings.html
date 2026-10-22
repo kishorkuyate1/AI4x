@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TestPlan Agent — Settings</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>⚙️ Settings</h1>
+      <nav>
+        <a href="/">Main</a>
+        <a href="/settings" class="active">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="prompt-card">
+      <h2>Jira Cloud</h2>
+      <div class="form-grid">
+        <label>Domain
+          <input type="text" id="jira_domain" placeholder="acme.atlassian.net" />
+        </label>
+        <label>Email
+          <input type="email" id="jira_email" placeholder="you@example.com" />
+        </label>
+        <label>API Token
+          <input type="password" id="jira_api_token" placeholder="••••••••" autocomplete="off" />
+        </label>
+        <label>Default Jira Key
+          <input type="text" id="default_jira_key" placeholder="PROJ-1" />
+        </label>
+      </div>
+      <div class="row">
+        <button id="test-jira" class="ghost">Test Jira Connection</button>
+        <span id="jira-status" class="status-pill"></span>
+      </div>
+    </section>
+
+    <section class="prompt-card">
+      <h2>GROQ</h2>
+      <div class="form-grid">
+        <label>API Key
+          <input type="password" id="groq_api_key" placeholder="••••••••" autocomplete="off" />
+        </label>
+        <label>Model
+          <input type="text" id="groq_model" placeholder="openai/gpt-oss-120b" />
+        </label>
+      </div>
+      <div class="row">
+        <button id="test-groq" class="ghost">Test GROQ Connection</button>
+        <span id="groq-status" class="status-pill"></span>
+      </div>
+      <p class="hint">GROQ is optional — the app generates a deterministic Test Plan without it.</p>
+    </section>
+
+    <section class="prompt-card">
+      <div class="row">
+        <button id="save-btn" class="primary">Save Settings</button>
+        <span id="save-status" class="status-pill"></span>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/settings.js"></script>
+</body>
+</html>

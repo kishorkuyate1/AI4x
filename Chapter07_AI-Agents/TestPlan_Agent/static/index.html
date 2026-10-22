@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TestPlan Agent</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <h1>🧪 TestPlan Agent</h1>
+      <nav>
+        <a href="/" class="active">Main</a>
+        <a href="/settings">Settings</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="prompt-card">
+      <h2>Describe what you need</h2>
+      <p class="hint">Example: <em>"Fetch PROJ-123 and create a test plan."</em> A Jira key is required.</p>
+      <textarea id="prompt" rows="3" placeholder="Fetch PROJ-123 and create a test plan"></textarea>
+      <div class="row">
+        <label class="toggle">
+          <input type="checkbox" id="use-groq" />
+          <span>Expand scenarios with GROQ (<code id="groq-model">openai/gpt-oss-120b</code>)</span>
+        </label>
+        <button id="run-btn" class="primary">Generate Test Plan</button>
+      </div>
+      <div id="status" class="status hidden"></div>
+    </section>
+
+    <section id="result" class="result-card hidden">
+      <div class="tabs">
+        <button class="tab active" data-tab="md">Markdown</button>
+        <button class="tab" data-tab="json">JSON</button>
+        <div class="spacer"></div>
+        <button id="download-md" class="ghost">Download .md</button>
+        <button id="download-json" class="ghost">Download .json</button>
+      </div>
+      <pre id="result-md" class="result-pane"></pre>
+      <pre id="result-json" class="result-pane hidden"></pre>
+      <div id="meta" class="meta"></div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

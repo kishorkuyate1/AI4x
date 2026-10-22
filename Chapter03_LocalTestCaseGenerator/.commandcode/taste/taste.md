@@ -1,0 +1,11 @@
+- Prefers `.txt` plain text files for explanations and documentation. Confidence: 0.8
+- Communicates in a casual, informal tone (greetings like "Hi", no periods, lowercase folder/file references). Confidence: 0.8
+- References GitHub repositories using a compact `repo:owner/name` shorthand notation rather than full URLs. Confidence: 0.7
+- Prefers a plan-first workflow: before implementation, explicitly asks for a written plan saved as a `plan.md` file inside the project (e.g., next to the prompt/spec it describes), then executes it. Confidence: 0.7
+- Provides credentials/secrets in a `.env` file and expects them to be read from `.env` (gitignored) rather than hardcoded in code. Confidence: 0.5
+- Expects completed work to be committed and pushed to their GitHub repository (proactively provides repo URLs and expects the assistant to handle the full git workflow: init, remote add, commit, push). Confidence: 0.6
+- When reviewing/revising an existing file, prefers the revised result as a new versioned file (e.g., `_V2`) in the same folder rather than overwriting the original. Confidence: 0.8
+- Structures task briefs with labeled sections (e.g., `Role :- …` / `Task :- …` / `Formate :- …`) and wants output files to follow a format similar to the original or an industry-level standard when one exists. Confidence: 0.6
+- Prefers concise outputs — explicitly asks not to make files/documents too large when reviewing or producing deliverables. Confidence: 0.8
+- Prefers a validation/review pass on existing artifacts that checks and reports whether any modification is required, before changing anything. Confidence: 0.7
+nfidence: 0.7

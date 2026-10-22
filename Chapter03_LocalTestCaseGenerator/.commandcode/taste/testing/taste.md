@@ -1,0 +1,17 @@
+- Uses Selenium + Java + Maven + TestNG for test automation and expects an enterprise-grade framework structure. Confidence: 0.9
+- Prefers Page Object Model with PageFactory: `@FindBy` annotations, constructor `initElements`, and reusable action methods. Confidence: 0.9
+- Uses TestNG annotations (`@Test`, `@BeforeTest`, etc.) with setup/teardown logic. Confidence: 0.8
+- Uses only XPath locators; avoids CSS selectors, ID, and name locators. Confidence: 0.9
+- Avoids `Thread.sleep()`; relies on `WebDriverWait` or implicit waits instead. Confidence: 0.9
+- Implements robust exception handling (structured try-catch or explicit signatures) in both page objects and test scripts. Confidence: 0.8
+- Prefers runnable code only output — no comments, explanations, dependencies, or extra text. Confidence: 0.8
+- Values modular, readable, consistent code structure with no bad coding practices. Confidence: 0.7
+- Also works on LLM testing/QA (e.g., PlayAI4xTester repo, chapter-based markdown course files) and authors strict anti-hallucination role prompts: only verifiable info, labeled inferences, deterministic output, stop-and-report when a step can't be completed. Confidence: 0.6
+- Designs and reviews test cases at the field level — validating test case design files for field-level coverage (per-field test case design) and API test case design. Confidence: 0.7
+- Assigns the assistant an explicit expert persona with seniority/experience qualifiers before tasking it (e.g., "Role :- you are the senior AI Engineer and 15 year of expirance in QA also"), framing work from that role. Confidence: 0.7
+- For LLM/QA prompt engineering, wants anti-hallucination guardrail prompts specialized per task type — e.g., a test-case-design version with a standard test case template (TC-ID, Title, Priority, Preconditions, Test Data, Test Steps, Expected Result, Type, Requirements Covered, Source), a Requirement Traceability Matrix, and Positive/Negative/Boundary/Error-handling coverage. Confidence: 0.7
+- For generic (non-task-specific) LLM/QA guardrail prompts, wants the applicable scope explicitly declared to cover ALL QA task types (test case design, test execution, defect/bug reporting, API testing, regression testing, exploratory testing, test data prep, test summary/reporting, coverage analysis) with a task-adaptive output format — task-specific output embedded in mandatory core sections. Confidence: 0.7
+- For field-level API test case design prompts, keeps the convention of one positive + one negative test case per field with boundary and mandatory-field validation checks embedded in the test steps, and a strict table output (TC No | Test Description | Step ID | Test Steps | Expected Result | Test Type) with no automation code or extra explanations. Confidence: 0.6
+- Uses the RICEPOT prompt framework (Role, Instructions, Context, Parameters, Output, Tone) to structure task prompts such as API test case design files. Confidence: 0.5
+- Wants expected results in test-case prompts to be specific and verifiable (e.g., HTTP status code or exact error message) when the requirements provide them, rather than vague "invalid response" phrasing. Confidence: 0.5
+- When revising prompt files (including files the user has modified), wants redundancy removed: repeated rules/instructions stated across multiple sections consolidated into one place and overlapping sections merged, with zero rule loss — otherwise leave content as-is (minimal intervention, "minimise/remove if required else leave as it is"). Confidence: 0.7

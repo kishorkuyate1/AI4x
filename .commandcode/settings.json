@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Shell(python --version)",
+      "Shell(python -m pip --version)",
+      "Shell(git -C \"C:\\Users\\kisho\\PlayAI4xTester\" check-ignore -v \"Chapter03_LocalTestCaseGenerator/src/.env\" 2>$null; Write-Output \"---\"; dir /b)",
+      "Shell(del /s /q __pycache__ 2>nul & for /d /r . %d in (__pycache__) do @if exist \"%d\" rd /s /q \"%d\" & dir /b)",
+      "Shell(python -c \"import streamlit; print(streamlit.__version__)\")",
+      "Shell(streamlit:*)",
+      "Shell(python -m streamlit run app.py --server.headless true)",
+      "Shell(git:*)",
+      "Shell(python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health'); print('OK')\")",
+      "Shell(npm:*)",
+      "Shell(npx tailwindcss init -p)",
+      "Shell(npx tailwindcss --version)",
+      "Shell(dir:*)",
+      "Shell(rmdir:*)",
+      "Shell(netstat:*)",
+      "Shell(findstr:*)",
+      "Shell(del:*)",
+      "Shell(npx vite)",
+      "Shell(node node_modules/vite/bin/vite.js)",
+      "Shell(rm:*)",
+      "powershell"
+    ],
+    "deny": [],
+    "defaultMode": "default"
+  }
+}
