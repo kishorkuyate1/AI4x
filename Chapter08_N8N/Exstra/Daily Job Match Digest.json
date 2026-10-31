@@ -1,0 +1,404 @@
+{
+  "name": "Daily Job Match Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "id": "61714332-36d5-4f2f-bad0-ed7c0db568f0",
+      "name": "Every Morning 8 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "jobTitle",
+              "type": "string",
+              "value": "software test engineer"
+            },
+            {
+              "id": "a2",
+              "name": "location",
+              "type": "string",
+              "value": "pune,Mumbai, banglore"
+            },
+            {
+              "id": "a3",
+              "name": "recipient",
+              "type": "string",
+              "value": "sandipgarje1997@gmail.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f6962a62-5c4a-41c2-abfb-3cd044666a35",
+      "name": "Search Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1",
+              "name": "queries",
+              "type": "array",
+              "value": "={{ [\"linkedin.com/jobs\", \"naukri.com\", \"in.indeed.com\"].map(site => \"site:\" + site + \" \" + $json.jobTitle + \" \" + $json.location) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3dc8677e-2eee-49c7-bec4-abb2a1cbe24b",
+      "name": "Build Platform Queries",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        496,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "queries",
+        "options": {
+          "destinationFieldName": "query"
+        }
+      },
+      "id": "1acc3f4a-f6d5-4bfa-9de5-9b6f27d96a5d",
+      "name": "One Search Per Platform",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        720,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "query": "={{ $json.query }}",
+        "count": 20,
+        "additionalParameters": {
+          "country": "IN",
+          "freshness": "pd"
+        }
+      },
+      "id": "25038366-9800-440d-ae02-c42263dcc7db",
+      "name": "Search Job Posts",
+      "type": "@brave/n8n-nodes-brave-search.braveSearch",
+      "typeVersion": 1.1,
+      "position": [
+        944,
+        224
+      ],
+      "credentials": {
+        "braveSearchApi": {
+          "id": null,
+          "name": "Gateway credits",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "jobs",
+        "options": {}
+      },
+      "id": "8c1d9fef-82b4-488e-b582-33e627a461c5",
+      "name": "Collect All Jobs",
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "",
+          "cachedResultName": "Select your CV (PDF) in Google Drive"
+        },
+        "options": {}
+      },
+      "id": "2e2549f5-085c-42cd-b5aa-bda2af42d57b",
+      "name": "Download My CV",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        800,
+        224
+      ],
+      "executeOnce": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "E2gq2QgADYJ5qffu",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "62068572-290b-4f5c-bd9f-8fe2e0a366cd",
+      "name": "Read CV Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        1024,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=MY CV:\n{{ $json.text }}\n\nTARGET ROLE: {{ $(\"Search Settings\").first().json.jobTitle }} in {{ $(\"Search Settings\").first().json.location }}\n\nJOB SEARCH RESULTS (JSON):\n{{ JSON.stringify($(\"Collect All Jobs\").first().json.jobs) }}",
+        "options": {
+          "systemMessage": "You are a job-matching assistant. From the search results, keep only real individual job postings (skip category pages, login pages and duplicates). Score each against the CV from 0-100 based on skills, experience and location fit. Return ONLY an HTML email body (no markdown, no code fences): a short intro line, then a table of the top 10 matches sorted by score with columns Score, Job Title, Company (if known), Platform (LinkedIn/Naukri/Indeed), a one-line reason, and an Apply link using the posting URL. If nothing relevant was found, say so in one sentence."
+        }
+      },
+      "id": "25c02d76-67f1-4d18-8410-e85e57276a6d",
+      "name": "Rank Jobs Against CV",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1280,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "540aeee6-d5c3-4daa-8260-3af7d213bfee",
+      "name": "OpenAI Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        224
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": null,
+          "name": "Gateway credits",
+          "__aiGatewayManaged": true
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $(\"Search Settings\").first().json.recipient }}",
+        "subject": "=Your job matches for {{ $now.toFormat(\"dd LLL yyyy\") }}",
+        "message": "={{ $json.output }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "29698332-3476-45e8-be95-c7fded818c49",
+      "name": "Email Job Digest",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        112
+      ],
+      "webhookId": "48bddc97-9d61-4d30-a268-1f8c363a644a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "SQ7yhU8wtIYMzddY",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Every Morning 8 AM": {
+      "main": [
+        [
+          {
+            "node": "Search Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Settings": {
+      "main": [
+        [
+          {
+            "node": "Build Platform Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Platform Queries": {
+      "main": [
+        [
+          {
+            "node": "One Search Per Platform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "One Search Per Platform": {
+      "main": [
+        [
+          {
+            "node": "Search Job Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Job Posts": {
+      "main": [
+        [
+          {
+            "node": "Collect All Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect All Jobs": {
+      "main": [
+        [
+          {
+            "node": "Download My CV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download My CV": {
+      "main": [
+        [
+          {
+            "node": "Read CV Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read CV Text": {
+      "main": [
+        [
+          {
+            "node": "Rank Jobs Against CV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Jobs Against CV": {
+      "main": [
+        [
+          {
+            "node": "Email Job Digest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Rank Jobs Against CV",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3f7d5acf-4b10-41e6-b5a6-253dd5f01e67",
+  "meta": {
+    "instanceId": "582010488c35afe50e4d21922338e661f113521489520dcf0cbbf002fc33f58d"
+  },
+  "nodeGroups": [
+    {
+      "id": "4dc9aeff-68d3-48ad-9b25-85e791801a54",
+      "name": "Find fresh job posts",
+      "nodeIds": [
+        "f6962a62-5c4a-41c2-abfb-3cd044666a35",
+        "3dc8677e-2eee-49c7-bec4-abb2a1cbe24b",
+        "1acc3f4a-f6d5-4bfa-9de5-9b6f27d96a5d",
+        "25038366-9800-440d-ae02-c42263dcc7db",
+        "8c1d9fef-82b4-488e-b582-33e627a461c5"
+      ],
+      "description": "Searches LinkedIn, Naukri and Indeed listings posted in the last day for your target role and location"
+    },
+    {
+      "id": "65a04fdb-9435-437c-994a-d3c72629c4c5",
+      "name": "Read my CV",
+      "nodeIds": [
+        "2e2549f5-085c-42cd-b5aa-bda2af42d57b",
+        "62068572-290b-4f5c-bd9f-8fe2e0a366cd"
+      ],
+      "description": "Pulls the latest CV from Google Drive each run so updates are picked up automatically"
+    },
+    {
+      "id": "ab27662c-9471-426a-8b4a-5cf1a4244315",
+      "name": "Rank and send matches",
+      "nodeIds": [
+        "25c02d76-67f1-4d18-8410-e85e57276a6d",
+        "540aeee6-d5c3-4daa-8260-3af7d213bfee",
+        "29698332-3476-45e8-be95-c7fded818c49"
+      ],
+      "description": "Scores every posting against your CV and emails you the top 10 with apply links"
+    }
+  ],
+  "id": "DzkPsIOO39s1uaT0",
+  "tags": []
+}
